@@ -70,10 +70,10 @@ path {
     });
 </script>
 <body>
-<h1>Genetic Algorithm Simulation Project</h1>
+<h1>Sperm Genetic Algorithm Simulation Project</h1>
 MSE542 Artificial Life, Spring 2014. Jae Shin.<br/>
 Life (Generation) FitFunction - 0 means closer to destination<br/>
-Main Algo: The Worst Performing Child gets Top 2 Parent's Mutated/Crossover Genes.
+Main Algorithm: The Worst Performing Child gets Top 2 Parent's Mutated/Crossover Genes.
 <br/>
 Population Size
     <select id="population">
@@ -87,6 +87,7 @@ Population Size
     </select>
 Mutation Rate
     <select id="mutationRate">
+        <option value="0.05">5%</option>
         <option value="0.1" selected>10%</option>
         <option value="0.2">20%</option>
         <option value="0.3">30%</option>
@@ -175,6 +176,8 @@ function getInitialRandomSperm() {
     gene_yawRange: gene_yawRange,
     generation: 0,
     fit: 1,
+    x: x,
+    y: y,
   };
 }
 this.removeAll = function() {
@@ -236,6 +239,12 @@ var infoPanel = g.append("text")
     .style("font-size", "24px")
     .style("fill", "white");
 
+var destPanel = g.append("text")
+    .attr("x", width - 80)
+    .attr("y", height - 10)
+    .style("font-size", "14px")
+    .style("fill", "white");
+    
 
 var tail = g.selectAll(".mid, .tail");
 
@@ -409,7 +418,7 @@ d3.timer(function() {
         
         
         // cross over tailLength
-        if( Math.random() >= 0.5) {
+        if( Math.random() <= elitismBias) {
             //temp = parent1.gene_tailStrength;
             //parent1.gene_tailStrength = parent2.gene_tailStrength;
             //parent2.gene_tailStrength = temp;
@@ -418,7 +427,7 @@ d3.timer(function() {
         else 
             child.gene_tailStrength = parent2.gene_tailStrength;
         
-        if( Math.random() >= 0.5) {
+        if( Math.random() <= elitismBias) {
             //temp = parent1.gene_initialEnergy;
             //parent1.gene_initialEnergy = parent2.gene_initialEnergy;
             //parent2.gene_initialEnergy = temp;
@@ -427,7 +436,7 @@ d3.timer(function() {
         else
             child.gene_initialEnergy = parent2.gene_initialEnergy;
         
-        if( Math.random() >= 0.5) {
+        if( Math.random() <= elitismBias) {
             //temp = parent1.gene_yawProbability;
             //parent1.gene_yawProbability = parent2.gene_yawProbability;
             //parent2.gene_yawProbability = temp;
@@ -436,7 +445,7 @@ d3.timer(function() {
         else
             child.gene_yawProbability = parent2.gene_yawProbability;
         
-        if( Math.random() >= 0.5) {
+        if( Math.random() <= elitismBias) {
             //temp = parent1.gene_yawRange;
             //parent1.gene_yawRange = parent2.gene_yawRange;
             //parent2.gene_yawRange = temp;
@@ -445,7 +454,7 @@ d3.timer(function() {
         else
             child.gene_yawRange = parent2.gene_yawRange;
 
-        if( Math.random() >= 0.5) {
+        if( Math.random() <= elitismBias) {
             child.vy_initial = parent1.vy_initial;
             child.vy = parent1.vy_initial;
         }
@@ -455,7 +464,7 @@ d3.timer(function() {
         }
 
 
-        if( Math.random() < elitismBias ) {     // inherit better parent's gene
+        if( Math.random() <= elitismBias ) {     // inherit better parent's gene
             
             if(parent1.gene_initialEnergy > parent2.gene_initialEnergy)
                 child.gene_energy = parent1.gene_initialEnergy;
@@ -474,33 +483,45 @@ d3.timer(function() {
             child.vy = parent1.vy_initial;
 
         }
-
+        function getMutation(v, constrainMin, constrainMax) {
+            // Math.random() -0.5 allows either increase or decrease
+            return constrain(constrainMin, constrainMax, v + v * (Math.random()-0.5) * mutationRate );
+        }
 
 
         // now, allow MUTATION
-        
+
+                
         //parent1.gene_tailStrength = constrain(1,50,parent1.gene_tailStrength + parent1.gene_tailStrength * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
         //parent2.gene_tailStrength = constrain(1,50,parent2.gene_tailStrength + parent2.gene_tailStrength * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
 
-        child.gene_tailStrength = constrain(1,25,child.gene_tailStrength + child.gene_tailStrength * mutationRate);// -0.5 is for could decrease or increase
+        // Tail Strength Mutation
+        parent1.gene_tailStrength = getMutation(parent1.gene_tailStrength, 1, 50);
+        parent2.gene_tailStrength = getMutation(parent2.gene_tailStrength, 1, 50);
+
+        //child.gene_tailStrength = constrain(1,25,child.gene_tailStrength + child.gene_tailStrength * mutationRate);// -0.5 is for could decrease or increase
 
         // mutation of initial energy
         //parent1.gene_initialEnergy = constrain(10,50,parent1.gene_initialEnergy + parent1.gene_initialEnergy * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
         //parent2.gene_initialEnergy = constrain(10,50,parent2.gene_initialEnergy + parent2.gene_initialEnergy * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
-        child.gene_initialEnergy = constrain(10,25,child.gene_initialEnergy + child.gene_initialEnergy * mutationRate );// -0.5 is for could decrease or increase
+        //child.gene_initialEnergy = constrain(10,25,child.gene_initialEnergy + child.gene_initialEnergy * mutationRate );// -0.5 is for could decrease or increase
+        child.gene_initialEnergy = getMutation(child.gene_initialEnergy, 10, 25);
     
     
         // mutation of yaw probability
         //parent1.gene_yawProbability = constrain(0,.5,parent1.gene_yawProbability + parent1.gene_yawProbability * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
         //parent2.gene_yawProbability = constrain(0,.5,parent2.gene_yawProbability + parent2.gene_yawProbability * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
-        child.gene_yawProbability = constrain(0,0.5,child.gene_yawProbability + child.gene_yawProbability * mutationRate * getOneOrNegativeOne());// -0.5 is for could decrease or increase
+        //child.gene_yawProbability = constrain(0,0.5,child.gene_yawProbability + child.gene_yawProbability * mutationRate * getOneOrNegativeOne());// -0.5 is for could decrease or increase
+        child.gene_yawProbability = getMutation(child.gene_yawProbability, 0, 0.5);
 
         // mutation of yaw.  can turn from .1 to 45 degrees
         //parent1.gene_yawRange = constrain(.01 / (2*Math.PI), 45 / (2*Math.PI),parent1.gene_yawRange + parent1.gene_yawRange * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
         //parent2.gene_yawRange = constrain(.01 / (2*Math.PI), 45 / (2*Math.PI),parent2.gene_yawRange + parent2.gene_yawRange * (Math.random()-0.5) * mutationRate);// -0.5 is for could decrease or increase
-        child.gene_yawRange = constrain(0.01 / (2*Math.PI), 45 / (2*Math.PI),child.gene_yawRange + child.gene_yawRange * mutationRate * getOneOrNegativeOne());// -0.5 is for could decrease or increase
+        //child.gene_yawRange = constrain(0.01 / (2*Math.PI), 45 / (2*Math.PI),child.gene_yawRange + child.gene_yawRange * mutationRate * getOneOrNegativeOne());// -0.5 is for could decrease or increase
+        child.gene_yawRange = getMutation(child.gene_yawRange, 0.01 / (2*Math.PI), 45 / (2*Math.PI));
 
-        child.vy = constrain(-child.gene_yawRange, child.gene_yawRange, child.vy + child.vy * mutationRate * getOneOrNegativeOne() );
+        // .vy is initial angle to start with
+        child.vy = getMutation( child.vy, -child.gene_yawRange, child.gene_yawRange );
 
         // replenish energy
         //parent1.gene_energy = parent1.gene_initialEnergy;
@@ -508,9 +529,23 @@ d3.timer(function() {
         
         
 
-        var x = Math.random()*10 + 1;
-        var y = Math.random() * 50 + 10;
+//        var x = Math.random()*10 + 1;
+//        var y = Math.random()*50 + 10;
   
+        var x, y;
+        
+        
+        if( Math.random() <= elitismBias ) {
+            x = getMutation(parent1.x, 1, 150);
+            y = getMutation(parent1.y, 1, 150);
+        }
+        else {
+            x = getMutation(parent2.x, 1, 150);
+            y = getMutation(parent2.y, 1, 150);
+        }
+  
+        child.x = x;
+        child.y = y;
 
         for(i = 0; i <m; i++) {
             child.path[i][0] = x;
@@ -571,6 +606,9 @@ d3.timer(function() {
     var avgFit = totalFit/n;
     infoPanel
         .text("Best Fit: " + bestFit.toFixed(2) + ", Avg Fit: " + avgFit.toFixed(2) );
+        
+        
+    destPanel.text("destination");
 });
 function getOneOrNegativeOne() {
     if(Math.random() >= .5)
