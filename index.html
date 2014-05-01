@@ -32,10 +32,10 @@ path {
 }
 
 </style>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
 <script>
     $(function() {
@@ -71,7 +71,8 @@ path {
 </script>
 <body>
 <h1>Sperm Genetic Algorithm Simulation Project</h1>
-MSE542 Artificial Life, Spring 2014. Jae Shin.<br/>
+by Jae Shin<br/>
+MSE542 Artificial Life, Spring 2014 @ <a href="http://www.uat.edu">University of Advancing Technology</a>, Tempe, AZ.<br/>
 Life (Generation) FitFunction - 0 means closer to destination<br/>
 Main Algorithm: The Worst Performing Child gets Top 2 Parent's Mutated/Crossover Genes.
 <br/>
@@ -107,7 +108,7 @@ Elitisism Bias
 <input type="button" value="Resume" id="resume"/>
 <div id="d3svg">
 </div>
-
+Inspired by excellent <a href="http://bl.ocks.org/mbostock/1136236">d3 tadpole example</a>
 <script>
 
 
@@ -540,8 +541,8 @@ d3.timer(function() {
             y = getMutation(parent1.y, 1, 150);
         }
         else {
-            x = getMutation(parent2.x, 1, 150);
-            y = getMutation(parent2.y, 1, 150);
+            x = Math.random()*10 + 1;
+            y = Math.random()*50 + 10;
         }
   
         child.x = x;
