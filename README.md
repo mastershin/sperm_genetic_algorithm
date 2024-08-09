@@ -7,5 +7,5 @@ Spring 2014
 
 Main Algorithm: The Worst Performing Child gets Top 2 Parent's Mutated/Crossover Genes.
 
-Deployed to [http://sperm-genetic-algori.appspot.com](http://sperm-genetic-algori.appspot.com)
+Deployed to [https://mastershin.github.io/sperm_genetic_algorithm/](https://mastershin.github.io/sperm_genetic_algorithm/)
 
