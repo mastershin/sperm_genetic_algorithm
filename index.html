@@ -37,10 +37,19 @@ path {
 }
 
 </style>
-<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/7.0.0/d3.min.js"></script>
+
+<!-- script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+
+<script
+  src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+  integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
+  crossorigin="anonymous"></script>
+
+<!-- link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" /> -->
+<!-- script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script> -->
+
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.min.js" integrity="sha256-Fb0zP4jE3JHqu+IBB9YktLcSjI1Zc6J2b6gTjB0LpoM=" crossorigin="anonymous"></script>
 
 <script>
     $(function() {
@@ -75,7 +84,7 @@ path {
     });
 </script>
 <body>
-<h1>Sperm Genetic Algorithm Simulation Project v1.2</h1>
+<h1>Sperm Genetic Algorithm Simulation Project v1.3</h1>
 by Jae Shin | <a href="https://www.linkedin.com/in/jaeyulshin">Linked In</a><br/>
 MSE542 Artificial Life, Spring 2014 @ <a href="http://www.uat.edu">University of Advancing Technology</a>, Tempe, AZ.<br/>
 Label: Life (Generation) FitFunction - 0 means closer to destination<br/>
@@ -123,7 +132,7 @@ var GeneticSperm = function(div, initPopulation, mutationRate, elitismBias) {
 //var mutationRate = .2;      // .1 means 10% mutation
 //var elitismBias = .6;       // .5 is neutral. >.5 means biased toward elitism
 
-var width = 600,
+var width = 800,
     height = 500;
 
 var targetTunnelWidth = 100;
